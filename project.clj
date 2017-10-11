@@ -16,7 +16,6 @@
                  [ring/ring-jetty-adapter "1.6.2"]
                  [org.clojure/tools.namespace "0.2.11"]
                  [hiccup "1.0.5"]
-
                  [rum "0.10.8"]
                  [com.taoensso/timbre "4.10.0"]
                  [bidi "2.1.2"]
