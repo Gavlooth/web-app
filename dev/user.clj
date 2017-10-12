@@ -2,11 +2,10 @@
   (:require [clojure.tools.namespace.repl
              :refer  [refresh disable-reload! ]]
             [figwheel-sidecar.repl-api :as f]
+            [integrant.core :as ig]
             [pio.state :refer [server&]]
-            [pio.server :refer [-main]]
-            [ring.adapter.jetty :as jetty]
-            ))
-
+            [pio.app-handler :refer [app-handler]]
+            [ring.adapter.jetty :as jetty]))
 
 (def config
     (ig/read-string  (slurp  "config.edn")))
@@ -28,7 +27,7 @@
   (f/cljs-repl))
 
 
-(def go
+#_(def go
   (do
     (disable-reload! (create-ns 'pio.state))
     (fn [x]
@@ -45,24 +44,14 @@
         (reset! server& (#'-main))))))
 
 
-(defmethod ig/init-key :adapter/jetty  [_ opts]
-    (let  [handler  (atom  (delay  (:handler opts)))
-                   options  (-> opts  (dissoc :handler)  (assoc :join? false))]
-      {:handler handler
-       :server  (jetty/run-jetty  (fn  [req]  (@@handler req)) options)}))
 
-(defmethod ig/halt-key! :adapter/jetty  [_ {:keys  [server]}]
+(defmethod ig/init-key :server [_ options]
+    (jetty/run-jetty app-handler options))
+
+(defmethod ig/halt-key! :server [_ server]
     (.stop server))
 
-(defmethod ig/suspend-key! :adapter/jetty  [_ {:keys  [handler]}]
-    (reset! handler  (promise)))
-
-(defmethod ig/resume-key :adapter/jetty  [key opts old-opts old-impl]
-    (if  (= (dissoc opts :handler)  (dissoc old-opts :handler))
-          (do  (deliver @(:handler old-impl)  (:handler opts))
-                      old-impl)
-              (do  (ig/halt-key! key old-impl)
-                          (ig/init-key key opts))))
-
+(def system
+    (ig/init config))
 
 
