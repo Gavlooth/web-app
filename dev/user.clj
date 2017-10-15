@@ -3,7 +3,7 @@
              :refer  [refresh disable-reload! ]]
             [figwheel-sidecar.repl-api :as f]
             [integrant.core :as ig]
-            [pio.state :refer [server&]]
+            [integrant.repl :refer [prep clear go halt init reset reset-all]] 
             [pio.app-handler :refer [app-handler]]
             [ring.adapter.jetty :as jetty]))
 
@@ -27,23 +27,6 @@
   (f/cljs-repl))
 
 
-#_(def go
-  (do
-    (disable-reload! (create-ns 'pio.state))
-    (fn [x]
-      (when ( = x :stop )
-        (when @server&
-          (.stop @server&)))
-      (when (= x :reset)
-        (when @server&
-          (.stop @server&)
-          (reset! server& nil))
-        (refresh)
-        (reset! server& (#'-main)))
-      (when (= x :init)
-        (reset! server& (#'-main))))))
-
-
 
 (defmethod ig/init-key :server [_ options]
     (jetty/run-jetty app-handler options))
@@ -51,7 +34,7 @@
 (defmethod ig/halt-key! :server [_ server]
     (.stop server))
 
-(def system
-    (ig/init config))
+(integrant.repl/set-prep! (constantly config))
+
 
 

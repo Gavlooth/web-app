@@ -21,7 +21,10 @@
                  [bidi "2.1.2"]
                  [camel-snake-kebab "0.4.0"]
                  [cljs-ajax "0.7.2"]
-                 [integrant "0.6.1"]]
+                 [integrant "0.6.1"]
+                [integrant/repl "0.2.0"]
+
+                 ]
 
   :plugins [[lein-figwheel "0.5.13"]
             [lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]]
