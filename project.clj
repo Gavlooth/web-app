@@ -16,15 +16,12 @@
                  [ring/ring-jetty-adapter "1.6.2"]
                  [org.clojure/tools.namespace "0.2.11"]
                  [hiccup "1.0.5"]
+                 [mount "0.1.11"] 
                  [rum "0.10.8"]
                  [com.taoensso/timbre "4.10.0"]
                  [bidi "2.1.2"]
                  [camel-snake-kebab "0.4.0"]
-                 [cljs-ajax "0.7.2"]
-                 [integrant "0.6.1"]
-                [integrant/repl "0.2.0"]
-
-                 ]
+                 [cljs-ajax "0.7.2"]]
 
   :plugins [[lein-figwheel "0.5.13"]
             [lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]]

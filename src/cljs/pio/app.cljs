@@ -18,10 +18,9 @@
              :name "upload-file"
              :id "upload-file"}]]])
 
-
 (defn initialize-app []
         (rum/mount (upload-component)
-                   (dom/getElement "app")))
+                   (get-element "app")))
 
 (initialize-app)
 
